@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MR.Q Smart Converter Pro</title>
-    <meta name="description" content="المحول الذكي المتطور من MR.Q للتحويل بين العملات والفئات النقدية بدقة متناهية.">
+    <meta name="description" content="المحول الذكي للعملات - تحويل بين القديم والجديد بسهولة ودقة عالية.">
     <meta name="theme-color" content="#1a73e8">
 
     <!-- PWA -->
@@ -103,13 +103,12 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                     تقسيم الفئات الجديدة
                 </h3>
-                <div id="notesContainer" class="space-y-3">
-                </div>
+                <div id="notesContainer" class="space-y-3"></div>
             </div>
         </div>
     </main>
 
-    <!-- باقي الأقسام (الدفع الذكي و الأسواق العالمية) ... يمكن نسخها من ملفك الأصلي -->
+    <!-- يمكنك نسخ باقي أقسام الدفع الذكي والأسواق العالمية كما في ملفك السابق -->
 
     <footer class="mt-16 text-center opacity-50 space-y-2">
         <p class="font-medium">MR.Q Smart Ecosystem &copy; 2026</p>
@@ -118,8 +117,56 @@
 </div>
 
 <script>
-    // كل السكريبتات كما هي من ملفك الأصلي
-    // مع تعديل دالة copy لتأخذ event:
+    // --- Theme Toggle ---
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+
+    // --- Language Toggle ---
+    let currentLang = 'ar';
+    function toggleLang() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        document.getElementById('langBtn').innerText = currentLang === 'ar' ? 'English' : 'العربية';
+    }
+
+    // --- Tabs ---
+    function switchTab(tabId) {
+        ['main','smart','market'].forEach(t=>{
+            document.getElementById(`view-${t}`)?.classList.add('hidden');
+            document.getElementById(`tab-${t}`)?.classList.remove('tab-active','opacity-100');
+            document.getElementById(`tab-${t}`)?.classList.add('opacity-60');
+        });
+        document.getElementById(`view-${tabId}`)?.classList.remove('hidden');
+        document.getElementById(`tab-${tabId}`)?.classList.add('tab-active','opacity-100');
+    }
+
+    // --- Main Converter ---
+    const notes = [500,200,100,50,25,10];
+    function handleMainInput(source) {
+        const oldIn = document.getElementById('oldSyp');
+        const newIn = document.getElementById('newSyp');
+        const rate = document.getElementById('usdRate').value || 1;
+
+        if(source==='old') newIn.value=(oldIn.value/100).toFixed(2);
+        else oldIn.value=(newIn.value*100).toFixed(0);
+
+        document.getElementById('usdResult').innerText=(oldIn.value/rate).toFixed(2)+" $";
+        renderNotes(newIn.value);
+    }
+
+    function renderNotes(val){
+        let amount=Math.floor(val), html='';
+        notes.forEach(note=>{
+            let count=Math.floor(amount/note);
+            amount%=note;
+            if(count>0) html+=`<div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 animate-fade"><span class="font-bold">${note} <small class="opacity-50">ليرة</small></span><span class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm font-bold">X ${count}</span></div>`;
+        });
+        document.getElementById('notesContainer').innerHTML = html || '<p class="text-center opacity-40 py-10">أدخل مبلغاً لعرض الفئات</p>';
+    }
+
+    // --- Copy Function ---
     function copy(id,event){
         const val=document.getElementById(id).innerText;
         navigator.clipboard.writeText(val);
@@ -129,7 +176,11 @@
         setTimeout(()=>btn.innerText=originalText,1500);
     }
 
-    // باقي الدوال toggleTheme, toggleLang, switchTab, handleMainInput, renderNotes, runSmartPay, loadMarketData كما في ملفك
+    // --- Load Default ---
+    window.onload=()=>{
+        if(localStorage.getItem('theme')==='dark') toggleTheme();
+        handleMainInput('old');
+    };
 </script>
 </body>
 </html>
