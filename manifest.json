@@ -1,0 +1,15 @@
+{
+  "name": "Smart Lira - MR.Q",
+  "short_name": "SmartLira",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f0f4f9",
+  "theme_color": "#1a73e8",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
