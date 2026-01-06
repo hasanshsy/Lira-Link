@@ -1,15 +1,17 @@
 {
-  "name": "Smart Lira - MR.Q",
-  "short_name": "SmartLira",
+  "name": "Lira Link | MR.Q",
+  "short_name": "LiraLink",
+  "description": "المحول الذكي للعملة السورية - تطوير أنس شيمية",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f0f4f9",
+  "background_color": "#f8fafd",
   "theme_color": "#1a73e8",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "logo.png", 
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
