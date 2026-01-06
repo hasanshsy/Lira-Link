@@ -1,18 +1,10 @@
-// This is the "Offline copy of pages" service worker
-const CACHE = "pwabuilder-offline";
-const offlineFallbackPage = "index.html";
+const CACHE_NAME = "mrd-cache-v1";
+const assets = ["./", "./index.html", "./manifest.json", "./logo.png"];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.add(offlineFallbackPage))
-  );
+self.addEventListener("install", event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(assets)));
 });
 
-self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.open(CACHE).then((cache) => cache.match(offlineFallbackPage));
-    })
-  );
+self.addEventListener("fetch", event => {
+  event.respondWith(caches.match(event.request).then(response => response || fetch(event.request)));
 });
