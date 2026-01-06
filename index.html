@@ -9,13 +9,14 @@
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo-192.png">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <script>
+        // تسجيل الـ Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('pwabuilder-sw.js')
@@ -107,8 +108,6 @@
             </div>
         </div>
     </main>
-
-    <!-- يمكنك نسخ باقي أقسام الدفع الذكي والأسواق العالمية كما في ملفك السابق -->
 
     <footer class="mt-16 text-center opacity-50 space-y-2">
         <p class="font-medium">MR.Q Smart Ecosystem &copy; 2026</p>
