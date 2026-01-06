@@ -1,12 +1,4 @@
-{
-  "name": "MR.Q Smart Converter Pro",
-  "short_name": "MR.Q",
-  "description": "المحول الذكي للعملات - شركة MR.Q",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#f8fafd",
-  "theme_color": "#1a73e8",
-  "icons": [
+"icons": [
     {
       "src": "logo.png",
       "sizes": "192x192",
@@ -18,7 +10,7 @@
       "type": "image/png"
     }
   ],
-  "screenshots": [
+"screenshots": [
     {
       "src": "logo.png",
       "sizes": "512x512",
@@ -26,4 +18,3 @@
       "form_factor": "wide"
     }
   ]
-}
