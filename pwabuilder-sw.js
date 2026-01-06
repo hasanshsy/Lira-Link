@@ -6,47 +6,28 @@ const staticAssets = [
   './logo.png'
 ];
 
-// --- Install ---
 self.addEventListener('install', async event => {
   event.waitUntil(
     (async () => {
-      try {
-        const cache = await caches.open(cacheName);
-        await cache.addAll(staticAssets);
-        console.log('Service Worker: Assets cached');
-      } catch (err) {
-        console.error('Service Worker: Failed to cache assets', err);
-      }
+      const cache = await caches.open(cacheName);
+      await cache.addAll(staticAssets);
     })()
   );
   self.skipWaiting();
 });
 
-// --- Activate ---
 self.addEventListener('activate', event => {
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
-      await Promise.all(
-        keys.map(key => {
-          if (key !== cacheName) {
-            console.log('Service Worker: Removing old cache', key);
-            return caches.delete(key);
-          }
-        })
-      );
+      await Promise.all(keys.map(key => key !== cacheName ? caches.delete(key) : null));
       self.clients.claim();
     })()
   );
 });
 
-// --- Fetch ---
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(res => res || fetch(event.request).catch(() => {
-        // fallback إذا أردت يمكن هنا تحط صفحة offline html
-        return new Response('Network error happened', {status: 408});
-      }))
+    caches.match(event.request).then(res => res || fetch(event.request))
   );
 });
