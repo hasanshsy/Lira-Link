@@ -2,16 +2,22 @@
   "name": "Lira Link | MR.Q",
   "short_name": "LiraLink",
   "description": "المحول الذكي للعملة السورية - تطوير أنس شيمية",
-  "start_url": "index.html",
+  "lang": "ar",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f8fafd",
   "theme_color": "#1a73e8",
   "icons": [
     {
-      "src": "logo.png", 
+      "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ]
 }
