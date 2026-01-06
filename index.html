@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>MR.Q Smart Converter Pro</title>
     <meta name="description" content="المحول الذكي المتطور من MR.Q للتحويل بين العملات والفئات النقدية بدقة متناهية.">
     <meta name="theme-color" content="#1a73e8">
+    
+    <!-- Manifest & Icons -->
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="logo.png">
 
+    <!-- Tailwind CSS & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     
+    <!-- Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -23,25 +26,15 @@
         }
     </script>
 
+    <!-- Styles -->
     <style>
         :root {
             --bg: #f8fafd; --card: #ffffff; --text: #1f1f1f; --accent: #1a73e8; --input: #f1f3f4; --border: #dadce0;
         }
-        .dark-mode {
-            --bg: #131314; --card: #1e1f20; --text: #e3e3e3; --accent: #a8c7fa; --input: #28292a; --border: #444746;
-        }
-        body { 
-            font-family: 'Noto Sans Arabic', 'Inter', sans-serif; 
-            background-color: var(--bg); color: var(--text); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .gemini-card {
-            background-color: var(--card); border: 1px solid var(--border); border-radius: 28px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .gemini-input {
-            background-color: var(--input); border: 1px solid transparent; border-radius: 16px;
-            padding: 16px; font-size: 1.1rem; width: 100%; transition: all 0.2s;
-        }
+        .dark-mode { --bg: #131314; --card: #1e1f20; --text: #e3e3e3; --accent: #a8c7fa; --input: #28292a; --border: #444746; }
+        body { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.4s cubic-bezier(0.4,0,0.2,1); }
+        .gemini-card { background-color: var(--card); border: 1px solid var(--border); border-radius: 28px; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .gemini-input { background-color: var(--input); border: 1px solid transparent; border-radius: 16px; padding: 16px; font-size: 1.1rem; width: 100%; transition: all 0.2s; }
         .gemini-input:focus { border-color: var(--accent); background-color: var(--card); box-shadow: 0 0 0 4px rgba(26,115,232,0.1); }
         .tab-active { background-color: var(--accent); color: var(--card); box-shadow: 0 4px 12px rgba(26,115,232,0.3); }
         .currency-badge { padding: 4px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; background: rgba(128,128,128,0.1); }
@@ -66,12 +59,14 @@
             </div>
         </header>
 
+        <!-- Tabs -->
         <nav class="flex gap-2 mb-8 bg-gray-200/50 dark:bg-gray-800/50 p-1.5 rounded-3xl w-fit">
             <button onclick="switchTab('main')" id="tab-main" class="tab-active px-6 py-3 rounded-2xl font-medium transition-all">المحول الرئيسي</button>
             <button onclick="switchTab('smart')" id="tab-smart" class="px-6 py-3 rounded-2xl font-medium transition-all opacity-60">الدفع الذكي</button>
             <button onclick="switchTab('market')" id="tab-market" class="px-6 py-3 rounded-2xl font-medium transition-all opacity-60">الأسواق العالمية</button>
         </nav>
 
+        <!-- Main Converter -->
         <main id="view-main" class="animate-fade">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 space-y-6">
@@ -96,7 +91,7 @@
                                     <p class="text-sm opacity-60">القيمة بالدولار الأمريكي</p>
                                     <h2 class="text-4xl font-bold text-blue-600 mt-1" id="usdResult">0.00 $</h2>
                                 </div>
-                                <button onclick="copy('usdResult')" class="copy-btn bg-white dark:bg-gray-800 px-6 py-3 rounded-2xl border shadow-sm hover:shadow-md font-bold">نسخ النتيجة</button>
+                                <button onclick="copy('usdResult', event)" class="copy-btn bg-white dark:bg-gray-800 px-6 py-3 rounded-2xl border shadow-sm hover:shadow-md font-bold">نسخ النتيجة</button>
                             </div>
                         </div>
                     </div>
@@ -107,17 +102,16 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
                         تقسيم الفئات الجديدة
                     </h3>
-                    <div id="notesContainer" class="space-y-3">
-                        </div>
+                    <div id="notesContainer" class="space-y-3"></div>
                 </div>
             </div>
         </main>
 
+        <!-- Smart Pay -->
         <section id="view-smart" class="hidden animate-fade">
             <div class="max-w-3xl mx-auto space-y-6">
                 <div class="gemini-card p-8">
                     <h3 class="text-xl font-bold mb-6 text-blue-500">نظام الدفع الذكي الآلي</h3>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-8">
                         <div class="space-y-2">
                             <label class="font-bold">سعر الغرض المطلق</label>
@@ -167,6 +161,7 @@
             </div>
         </section>
 
+        <!-- Market -->
         <section id="view-market" class="hidden animate-fade">
             <div class="gemini-card p-8">
                 <div class="flex justify-between items-center mb-8">
@@ -176,13 +171,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                         <h4 class="font-bold mb-4 opacity-70">Top 5 Cryptocurrencies (USD)</h4>
-                        <div id="crypto-list" class="space-y-4">
-                            </div>
+                        <div id="crypto-list" class="space-y-4"></div>
                     </div>
                     <div>
                         <h4 class="font-bold mb-4 opacity-70">Forex Major Pairs</h4>
-                        <div id="forex-list" class="space-y-4">
-                            </div>
+                        <div id="forex-list" class="space-y-4"></div>
                     </div>
                 </div>
             </div>
@@ -194,12 +187,12 @@
         </footer>
     </div>
 
+    <!-- Scripts -->
     <script>
-        // --- State Management ---
+        // State
         let currentLang = 'ar';
         const notes = [500, 200, 100, 50, 25, 10];
 
-        // --- Core Functions ---
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -212,104 +205,80 @@
         }
 
         function switchTab(tabId) {
-            ['main', 'smart', 'market'].forEach(t => {
+            ['main','smart','market'].forEach(t=>{
                 document.getElementById(`view-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('tab-active', 'opacity-100');
+                document.getElementById(`tab-${t}`).classList.remove('tab-active','opacity-100');
                 document.getElementById(`tab-${t}`).classList.add('opacity-60');
             });
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).classList.add('tab-active', 'opacity-100');
+            document.getElementById(`tab-${tabId}`).classList.add('tab-active','opacity-100');
         }
 
         function handleMainInput(source) {
             const oldIn = document.getElementById('oldSyp');
             const newIn = document.getElementById('newSyp');
-            const rate = document.getElementById('usdRate').value || 1;
+            const rate = parseFloat(document.getElementById('usdRate').value) || 1;
 
-            if(source === 'old') {
-                newIn.value = (oldIn.value / 100).toFixed(2);
-            } else {
-                oldIn.value = (newIn.value * 100).toFixed(0);
-            }
-            
-            document.getElementById('usdResult').innerText = (oldIn.value / rate).toFixed(2) + " $";
-            renderNotes(newIn.value);
+            if(source==='old') newIn.value = oldIn.value ? (oldIn.value / 100).toFixed(2) : 0;
+            else oldIn.value = newIn.value ? (newIn.value * 100).toFixed(0) : 0;
+
+            document.getElementById('usdResult').innerText = oldIn.value ? (oldIn.value / rate).toFixed(2) + " $" : "0.00 $";
+            renderNotes(parseFloat(newIn.value)||0);
         }
 
-        function renderNotes(val) {
-            let amount = Math.floor(val);
-            let html = '';
-            notes.forEach(note => {
-                let count = Math.floor(amount / note);
-                amount %= note;
-                if(count > 0) {
-                    html += `
-                    <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 animate-fade">
-                        <span class="font-bold">${note} <small class="opacity-50">ليرة</small></span>
-                        <span class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm font-bold">X ${count}</span>
-                    </div>`;
-                }
+        function renderNotes(val){
+            let amount=Math.floor(val), html='';
+            notes.forEach(note=>{
+                let count=Math.floor(amount/note);
+                amount%=note;
+                if(count>0) html+=`<div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 animate-fade"><span class="font-bold">${note} <small class="opacity-50">ليرة</small></span><span class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm font-bold">X ${count}</span></div>`;
             });
-            document.getElementById('notesContainer').innerHTML = html || '<p class="text-center opacity-40 py-10">أدخل مبلغاً لعرض الفئات</p>';
+            document.getElementById('notesContainer').innerHTML=html||'<p class="text-center opacity-40 py-10">أدخل مبلغاً لعرض الفئات</p>';
         }
 
-        function runSmartPay() {
-            const price = parseFloat(document.getElementById('payPrice').value) || 0;
-            const priceType = document.getElementById('payPriceType').value;
-            const paid = parseFloat(document.getElementById('payAmount').value) || 0;
-            const paidType = document.getElementById('payAmountType').value;
+        function runSmartPay(){
+            const price=parseFloat(document.getElementById('payPrice').value)||0;
+            const priceType=document.getElementById('payPriceType').value;
+            const paid=parseFloat(document.getElementById('payAmount').value)||0;
+            const paidType=document.getElementById('payAmountType').value;
 
-            const suggestion = priceType === 'old' ? (price/100).toFixed(2) + " جديدة" : (price*100).toLocaleString() + " قديمة";
-            document.getElementById('smart-suggestion').innerText = price > 0 ? "السعر المعادل: " + suggestion : "ادخل السعر للتحويل...";
+            const suggestion = priceType==='old' ? (price/100).toFixed(2) + " جديدة" : (price*100).toLocaleString() + " قديمة";
+            document.getElementById('smart-suggestion').innerText=price>0?"السعر المعادل: "+suggestion:"ادخل السعر للتحويل...";
 
-            const priceBase = priceType === 'new' ? price * 100 : price;
-            const paidBase = paidType === 'new' ? paid * 100 : paid;
-            
+            const priceBase = priceType==='new'?price*100:price;
+            const paidBase = paidType==='new'?paid*100:paid;
             const diffBase = paidBase - priceBase;
 
-            document.getElementById('res-change-old').innerText = diffBase > 0 ? diffBase.toLocaleString() : 0;
-            document.getElementById('res-change-new').innerText = diffBase > 0 ? (diffBase / 100).toFixed(2) : 0;
+            document.getElementById('res-change-old').innerText = diffBase>0?diffBase.toLocaleString():0;
+            document.getElementById('res-change-new').innerText = diffBase>0?(diffBase/100).toFixed(2):0;
         }
 
-        function loadMarketData() {
-            const cryptos = [
-                {n: 'Bitcoin', s: 'BTC', p: '94,231.50', c: '+1.2%'},
-                {n: 'Ethereum', s: 'ETH', p: '3,450.12', c: '-0.5%'},
-                {n: 'Solana', s: 'SOL', p: '145.22', c: '+4.8%'}
+        function loadMarketData(){
+            const cryptos=[
+                {n:'Bitcoin',s:'BTC',p:'94,231.50',c:'+1.2%'},
+                {n:'Ethereum',s:'ETH',p:'3,450.12',c:'-0.5%'},
+                {n:'Solana',s:'SOL',p:'145.22',c:'+4.8%'}
             ];
-            const forex = [
-                {p: 'EUR/USD', v: '1.0852', c: 'Stable'},
-                {p: 'GBP/USD', v: '1.2640', c: 'Up'},
-                {p: 'USD/JPY', v: '151.40', c: 'Down'}
+            const forex=[
+                {p:'EUR/USD',v:'1.0852',c:'Stable'},
+                {p:'GBP/USD',v:'1.2640',c:'Up'},
+                {p:'USD/JPY',v:'151.40',c:'Down'}
             ];
-
-            document.getElementById('crypto-list').innerHTML = cryptos.map(c => `
-                <div class="flex justify-between p-3 border-b border-gray-100 dark:border-gray-800">
-                    <span><b>${c.s}</b> <small class="opacity-50">${c.n}</small></span>
-                    <span class="font-bold font-mono">${c.p} $</span>
-                    <span class="${c.c.includes('+') ? 'text-green-500' : 'text-red-500'} text-xs font-bold">${c.c}</span>
-                </div>
-            `).join('');
-
-            document.getElementById('forex-list').innerHTML = forex.map(f => `
-                <div class="flex justify-between p-3 border-b border-gray-100 dark:border-gray-800">
-                    <span class="font-bold">${f.p}</span>
-                    <span class="font-mono">${f.v}</span>
-                </div>
-            `).join('');
+            document.getElementById('crypto-list').innerHTML = cryptos.map(c=>`<div class="flex justify-between p-3 border-b border-gray-100 dark:border-gray-800"><span><b>${c.s}</b> <small class="opacity-50">${c.n}</small></span><span class="font-bold font-mono">${c.p} $</span><span class="${c.c.includes('+')?'text-green-500':'text-red-500'} text-xs font-bold">${c.c}</span></div>`).join('');
+            document.getElementById('forex-list').innerHTML = forex.map(f=>`<div class="flex justify-between p-3 border-b border-gray-100 dark:border-gray-800"><span class="font-bold">${f.p}</span><span class="font-mono">${f.v}</span></div>`).join('');
         }
 
-        function copy(id) {
-            const val = document.getElementById(id).innerText;
+        function copy(id,event){
+            const val=document.getElementById(id).innerText;
             navigator.clipboard.writeText(val);
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "تم النسخ!";
-            setTimeout(() => btn.innerText = originalText, 1500);
+            const btn=event.target;
+            const originalText=btn.innerText;
+            btn.innerText="تم النسخ!";
+            setTimeout(()=>btn.innerText=originalText,1500);
         }
 
-        window.onload = () => {
-            if(localStorage.getItem('theme') === 'dark') toggleTheme();
+        window.onload=()=>{
+            if(localStorage.getItem('theme')==='dark') toggleTheme();
             loadMarketData();
             handleMainInput('old');
         };
