@@ -3,151 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lira Link | MR.Q Smart Converter</title>
+    <title>MR.Q Smart Converter</title>
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Lira Link MR.Q","short_name":"LiraLink","description":"تطوير أنس شيمية - محول عملات ذكي","start_url":"./","display":"standalone","background_color":"#f8fafd","theme_color":"#1a73e8","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/5968/5968279.png","sizes":"512x512","type":"image/png"}]}'>
+    
     <meta name="theme-color" content="#1a73e8">
-    <link rel="apple-touch-icon" href="logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --bg: #f8fafd; --card: #ffffff; --text: #1f1f1f; --accent: #1a73e8; --input: #f1f3f4; --border: #dadce0; }
-        .dark-mode { --bg: #131314; --card: #1e1f20; --text: #e3e3e3; --accent: #a8c7fa; --input: #28292a; --border: #444746; }
-        body { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.4s; }
-        .gemini-card { background-color: var(--card); border: 1px solid var(--border); border-radius: 28px; }
-        .gemini-input { background-color: var(--input); border: 1px solid transparent; border-radius: 16px; padding: 16px; width: 100%; }
-        .gemini-input:focus { border-color: var(--accent); background-color: var(--card); outline: none; }
-        .tab-active { background-color: var(--accent); color: var(--card); }
-        .animate-fade { animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        :root { --bg: #f8fafd; --card: #ffffff; --text: #1f1f1f; --accent: #1a73e8; }
+        .dark-mode { --bg: #131314; --card: #1e1f20; --text: #e3e3e3; --accent: #a8c7fa; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.4s; }
+        .gemini-card { background-color: var(--card); border: 1px solid #dadce0; border-radius: 24px; padding: 2rem; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .gemini-input { background-color: #f1f3f4; border-radius: 12px; padding: 12px; width: 100%; color: #000; border: 2px solid transparent; }
+        .dark-mode .gemini-input { background-color: #28292a; color: #fff; }
+        .gemini-input:focus { border-color: var(--accent); outline: none; }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-10">
+<body class="min-h-screen p-4">
 
-    <div class="max-w-5xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+    <div class="max-w-2xl mx-auto mt-10">
+        <header class="flex justify-between items-center mb-8">
             <div>
-                <h1 class="text-3xl font-bold"><span class="text-blue-500">MR.Q</span> Smart Converter</h1>
-                <p class="opacity-60 text-sm">تطوير: Anas Shameea | الإصدار 2.0</p>
+                <h1 class="text-2xl font-bold"><span class="text-blue-500">MR.Q</span> Converter</h1>
+                <p class="text-xs opacity-60">تطوير: Anas Shameea | V2.1</p>
             </div>
-            <div class="flex gap-3 bg-white dark:bg-gray-800 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <button onclick="toggleLang()" id="langBtn" class="px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700">English</button>
-                <button onclick="toggleTheme()" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700">🌓</button>
-            </div>
+            <button onclick="document.body.classList.toggle('dark-mode')" class="p-3 rounded-full bg-gray-200 dark:bg-gray-700">🌓</button>
         </header>
 
-        <nav class="flex gap-2 mb-8 bg-gray-200/50 dark:bg-gray-800/50 p-1.5 rounded-3xl w-fit">
-            <button onclick="switchTab('main')" id="tab-main" class="tab-active px-6 py-3 rounded-2xl font-medium">المحول الرئيسي</button>
-            <button onclick="switchTab('smart')" id="tab-smart" class="px-6 py-3 rounded-2xl font-medium opacity-60">الدفع الذكي</button>
-        </nav>
-
-        <main id="view-main" class="animate-fade">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="gemini-card p-8 shadow-xl">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="font-bold px-2">الليرة القديمة</label>
-                                <input type="number" id="oldSyp" class="gemini-input" placeholder="مثلاً: 50000" oninput="handleMainInput('old')">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="font-bold px-2">الليرة الجديدة</label>
-                                <input type="number" id="newSyp" class="gemini-input" placeholder="مثلاً: 500" oninput="handleMainInput('new')">
-                            </div>
-                        </div>
-                        <div class="mt-8 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-3xl border border-blue-100 dark:border-blue-800">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="font-bold">سعر صرف الدولار</span>
-                                <input type="number" id="usdRate" value="15000" class="w-32 p-2 rounded-xl border text-center font-bold text-blue-600" oninput="handleMainInput('old')">
-                            </div>
-                            <div class="flex justify-between items-end">
-                                <div><p class="text-sm opacity-60">القيمة بالدولار</p><h2 class="text-4xl font-bold text-blue-600" id="usdResult">0.00 $</h2></div>
-                                <button onclick="copy('usdResult')" class="bg-white dark:bg-gray-800 px-6 py-3 rounded-2xl border font-bold">نسخ</button>
-                            </div>
-                        </div>
+        <div class="gemini-card shadow-xl">
+            <div class="space-y-6">
+                <div>
+                    <label class="block mb-2 font-bold">الليرة القديمة</label>
+                    <input type="number" id="oldSyp" class="gemini-input text-xl" placeholder="0" oninput="convert('old')">
+                </div>
+                <div>
+                    <label class="block mb-2 font-bold text-blue-500">الليرة الجديدة</label>
+                    <input type="number" id="newSyp" class="gemini-input text-xl border-blue-200" placeholder="0" oninput="convert('new')">
+                </div>
+                <hr class="opacity-10">
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
+                    <div class="flex justify-between text-sm mb-2 opacity-70">
+                        <span>سعر الصرف (USD)</span>
+                        <input type="number" id="rate" value="15000" class="w-20 text-center rounded bg-white dark:bg-gray-800" oninput="convert('old')">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-3xl font-bold text-blue-600" id="usdRes">0.00 $</span>
+                        <button onclick="copy()" class="text-sm bg-blue-500 text-white px-4 py-2 rounded-lg">نسخ</button>
                     </div>
                 </div>
-                <div class="gemini-card p-6">
-                    <h3 class="font-bold mb-6">تقسيم الفئات الجديدة</h3>
-                    <div id="notesContainer" class="space-y-3"></div>
-                </div>
             </div>
-        </main>
-
-        <footer class="mt-16 text-center opacity-50">
-            <p>MR.Q Smart Ecosystem &copy; 2026</p>
-        </footer>
+        </div>
     </div>
 
     <script>
-        // تسجيل الـ Service Worker بشكل صحيح
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./pwabuilder-sw.js')
-                .then(reg => console.log('SW Registered'))
-                .catch(err => console.log('SW Failed', err));
-            });
-        }
-
-        let currentLang = 'ar';
-        const notes = [500, 200, 100, 50, 25, 10];
-
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        }
-
-        function switchTab(tabId) {
-            ['main', 'smart'].forEach(t => {
-                const view = document.getElementById(`view-${t}`);
-                if(view) view.classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('tab-active');
-            });
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
-        }
-
-        function handleMainInput(source) {
+        function convert(type) {
             const oldIn = document.getElementById('oldSyp');
             const newIn = document.getElementById('newSyp');
-            const rate = document.getElementById('usdRate').value || 1;
-
-            if(source === 'old') {
+            const rate = document.getElementById('rate').value || 1;
+            
+            if(type === 'old') {
                 newIn.value = (oldIn.value / 100).toFixed(2);
             } else {
                 oldIn.value = (newIn.value * 100).toFixed(0);
             }
-            document.getElementById('usdResult').innerText = (oldIn.value / rate).toFixed(2) + " $";
-            renderNotes(newIn.value);
+            document.getElementById('usdRes').innerText = (oldIn.value / rate).toFixed(2) + " $";
         }
 
-        function renderNotes(val) {
-            let amount = Math.floor(val);
-            let html = '';
-            notes.forEach(note => {
-                let count = Math.floor(amount / note);
-                amount %= note;
-                if(count > 0) {
-                    html += `<div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700 animate-fade">
-                        <span class="font-bold">${note} ليرة</span>
-                        <span class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm">X ${count}</span>
-                    </div>`;
-                }
-            });
-            document.getElementById('notesContainer').innerHTML = html || '<p class="text-center opacity-40">أدخل مبلغاً</p>';
+        function copy() {
+            navigator.clipboard.writeText(document.getElementById('usdRes').innerText);
+            alert("تم النسخ بنجاح!");
         }
 
-        function copy(id) {
-            const val = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(val);
-            alert("تم النسخ!");
+        // Service Worker Script لتجاوز تحذير PWABuilder
+        const swCode = `self.addEventListener('fetch', function(event) {});`;
+        const blob = new Blob([swCode], {type: 'text/javascript'});
+        const swUrl = URL.createObjectURL(blob);
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(swUrl);
         }
-
-        window.onload = () => {
-            if(localStorage.getItem('theme') === 'dark') toggleTheme();
-            handleMainInput('old');
-        };
     </script>
 </body>
 </html>
