@@ -3,27 +3,26 @@ const staticAssets = [
   './',
   './index.html',
   './manifest.json',
-  './logo.png'
+  './logo-48.png',
+  './logo-72.png',
+  './logo-96.png',
+  './logo-144.png',
+  './logo-192.png',
+  './logo-512.png'
 ];
 
-self.addEventListener('install', async event => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    (async () => {
-      const cache = await caches.open(cacheName);
-      await cache.addAll(staticAssets);
-    })()
+    caches.open(cacheName).then(cache => cache.addAll(staticAssets))
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    (async () => {
-      const keys = await caches.keys();
-      await Promise.all(keys.map(key => key !== cacheName ? caches.delete(key) : null));
-      self.clients.claim();
-    })()
+    caches.keys().then(keys => Promise.all(keys.map(key => key !== cacheName ? caches.delete(key) : null)))
   );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
