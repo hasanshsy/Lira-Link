@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MR.Q Currency Smart Converter Pro</title>
+    <title>Lira Link | MR.Q Smart Converter</title>
+
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICAgIm5hbWUiOiAiTGlyYSBMaW5rIHwgTVIuUSIsCiAgICAic2hvcnRfbmFtZSI6ICJMaXJhTGluayIsCiAgICAic2VydmljZV93b3JrZXIiOiB7CiAgICAgICAgInNyYyI6ICJwd2FidWlsZGVyLXN3LmpzIgogICAgfSwKICAgICJkZXNjcmlwdGlvbiI6ICLQp9mE2YXYrdmI2YQg2KfZhNiwZNmKINmE2YTYudmFmNmHINin2YTYs9mI2LHZitmHINin2YTYrNiv2ZitivNip9mHINmI2KfZhNmC2K/ZitmF2YcgLSDRtNix2YPZhyBNUi5RIiwKICAgICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmOGZhZmQiLAogICAgInRoZW1lX2NvbG9yIjogIiMxYTczZTgiLAogICAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgICAic3RhcnRfdXJsIjogIi4vIiwKICAgICJpY29ucyI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJzcmMiOiAiaWNvbi5wbmciLAogICAgICAgICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgICAgICB9CiAgICBdCn0=">
+    <meta name="theme-color" content="#1a73e8">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -178,6 +182,13 @@
     </div>
 
     <script>
+        // --- PWA Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/pwabuilder-sw.js').catch(err => console.log('SW registration failed', err));
+            });
+        }
+
         // --- State Management ---
         let currentLang = 'ar';
         const notes = [500, 200, 100, 50, 25, 10];
@@ -192,7 +203,6 @@
             currentLang = currentLang === 'ar' ? 'en' : 'ar';
             document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
             document.getElementById('langBtn').innerText = currentLang === 'ar' ? 'English' : 'العربية';
-            // Here you would update all labels via a dictionary
         }
 
         function switchTab(tabId) {
@@ -238,24 +248,21 @@
             document.getElementById('notesContainer').innerHTML = html || '<p class="text-center opacity-40 py-10">أدخل مبلغاً لعرض الفئات</p>';
         }
 
-        // --- Logic: Smart Pay (The requested intelligence) ---
+        // --- Logic: Smart Pay ---
         function runSmartPay() {
             const price = parseFloat(document.getElementById('payPrice').value) || 0;
             const priceType = document.getElementById('payPriceType').value;
             const paid = parseFloat(document.getElementById('payAmount').value) || 0;
             const paidType = document.getElementById('payAmountType').value;
 
-            // 1. Suggestion Logic
             const suggestion = priceType === 'old' ? (price/100).toFixed(2) + " جديدة" : (price*100).toLocaleString() + " قديمة";
             document.getElementById('smart-suggestion').innerText = price > 0 ? "السعر المعادل: " + suggestion : "ادخل السعر للتحويل...";
 
-            // 2. Internal Base Calculation (Standardize to OLD)
             const priceBase = priceType === 'new' ? price * 100 : price;
-            const paidBase = paidType === 'new' ? paid * 100 : paid;
+            const paidBase = pdType = paidType === 'new' ? paid * 100 : paid;
             
             const diffBase = paidBase - priceBase;
 
-            // 3. Output in both formats
             document.getElementById('res-change-old').innerText = diffBase > 0 ? diffBase.toLocaleString() : 0;
             document.getElementById('res-change-new').innerText = diffBase > 0 ? (diffBase / 100).toFixed(2) : 0;
         }
@@ -298,7 +305,6 @@
             setTimeout(() => btn.innerText = originalText, 1500);
         }
 
-        // --- Init ---
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') toggleTheme();
             loadMarketData();
@@ -306,5 +312,4 @@
         };
     </script>
 </body>
-
 </html>
