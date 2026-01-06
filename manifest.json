@@ -1,18 +1,21 @@
 {
   "name": "MR.Q Smart Converter Pro",
   "short_name": "MR.Q",
-  "description": "المحول الذكي للعملات - تحويل بين الليرة القديمة والجديدة وحساب فئات العملات بدقة عالية.",
-  "start_url": "/index.html",
+  "description": "المحول الذكي للعملات - شركة MR.Q",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f8fafd",
   "theme_color": "#1a73e8",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ],
   "screenshots": [
@@ -20,15 +23,7 @@
       "src": "logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "Home Screen"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Home Screen Mobile"
+      "form_factor": "wide"
     }
   ]
 }
